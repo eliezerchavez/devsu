@@ -1,7 +1,7 @@
 version: '2'
 services:
   nginx:
-    image: nginx:1.13.9
+    image: echavez/devsu-nginx
     networks:
       static-network:
         ipv4_address: 172.20.128.2
