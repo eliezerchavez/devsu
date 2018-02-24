@@ -1,67 +1,50 @@
+/*!
+ * Copyright (c) 2018 Eliezer Chavez <eliezer.chavez@gmail.com>
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 var express = require("express")
   , bodyParser = require('body-parser')
   , app = express()
   , os = require("os")
-  , swagger_node_express = require("swagger-node-express")
-  , paramTypes = swagger_node_express.paramTypes
-  , errors = swagger_node_express.errors;
+  , validator = require("validator");
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-hello = {
-                'spec': {
-                  path : "/hello/{name}",
-                  notes : "says hello",
-                  method: "GET",
-                  summary : "Hello {name} from <hostname>",
-                  parameters : [paramTypes.path('name', 'name to say hello to', 'string')],
-                  responseMessages : [errors.invalid('name'), errors.notFound('name')],
-                  nickname : "hello"
-                },
-                'action': function(req, res) {
-                  res.send({'message': 'Hello ' + req.params.name + ' from ' +  os.hostname() });
-                }
-              };
+app.get('/hello/:name', function(req, res) {
 
-apiInfo = {
-            title: "Hello World App",
-            description: "Hello World App",
-            termsOfServiceUrl: "http://localhost/terms/",
-            contact: "elizer.chavez@gmail.com",
-            license: "Apache 2.0",
-            licenseUrl: "http://www.apache.org/licenses/LICENSE-2.0.html"
-          }
+  if (validator.isAlpha(req.params.name, 'es-ES'))
+    res.send({"message":"Hello " + req.params.name + " from " + os.hostname()});
+  else 
+    res.send({"message":"Only valid names are accepted!"});
 
-swagger = swagger_node_express.createNew(app)
-
-swagger.addGet(hello)
-
-swagger.setApiInfo(apiInfo)
-swagger.configureSwaggerPaths("", "api-docs", "")
-swagger.configure("http://localhost:8002", "1.0.0");
-
-
-// Serve up swagger ui at /docs via static route
-var docs_handler = express.static(__dirname + '/node_modules/swagger-node-express/swagger-ui/');
-app.get(/^\/docs(\/.*)?$/, function(req, res, next) {
-  if (req.url === '/docs') { // express static barfs on root url w/o trailing slash
-    res.writeHead(302, { 'Location' : req.url + '/' });
-    res.end();
-    return;
-  }
-  // take off leading /docs so that connect locates file correctly
-  req.url = req.url.substr('/docs'.length);
-  return docs_handler(req, res, next);
-});
+})
 
 //don't start server when running from mocha
 
 if(process.mainModule.filename.indexOf('node_modules/mocha/bin/_mocha')==-1)
 {
   app.listen(8002);
-  console.log('starting on port 8002')
+  console.log("starting on port 8002")
 }
 
-app.swagger = swagger
+
 module.exports = app
