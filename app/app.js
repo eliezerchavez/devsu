@@ -1,6 +1,7 @@
 var express = require("express")
   , bodyParser = require('body-parser')
   , app = express()
+  , os = require("os")
   , swagger_node_express = require("swagger-node-express")
   , paramTypes = swagger_node_express.paramTypes
   , errors = swagger_node_express.errors;
@@ -8,19 +9,18 @@ var express = require("express")
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-
-helloWorld = {
+hello = {
                 'spec': {
                   path : "/hello/{name}",
                   notes : "says hello",
                   method: "GET",
-                  summary : "Helllo World",
+                  summary : "Hello {name} from <hostname>",
                   parameters : [paramTypes.path('name', 'name to say hello to', 'string')],
                   responseMessages : [errors.invalid('name'), errors.notFound('name')],
                   nickname : "hello"
                 },
                 'action': function(req, res) {
-                  res.send({'message': 'Hello ' + req.params.name + ' from ' + req.headers.host });
+                  res.send({'message': 'Hello ' + req.params.name + ' from ' +  os.hostname() });
                 }
               };
 
@@ -35,7 +35,7 @@ apiInfo = {
 
 swagger = swagger_node_express.createNew(app)
 
-swagger.addGet(helloWorld)
+swagger.addGet(hello)
 
 swagger.setApiInfo(apiInfo)
 swagger.configureSwaggerPaths("", "api-docs", "")
