@@ -1,3 +1,6 @@
+/*!
+ * Copyright (c) 2018 Eliezer Chavez <eliezer.chavez@gmail.com>
+ */
 pipeline {
     agent any
     
