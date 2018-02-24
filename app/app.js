@@ -29,7 +29,7 @@ var express = require("express")
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-app.get('/hello/:name', function(req, res) {
+app.get("/hello/:name", function(req, res) {
 
   if (validator.isAlpha(req.params.name, 'es-ES'))
     res.send({"message":"Hello " + req.params.name + " from " + os.hostname()});
@@ -40,10 +40,10 @@ app.get('/hello/:name', function(req, res) {
 
 //don't start server when running from mocha
 
-if(process.mainModule.filename.indexOf('node_modules/mocha/bin/_mocha')==-1)
+if(process.mainModule.filename.indexOf("node_modules/mocha/bin/_mocha")==-1)
 {
   app.listen(8002);
-  console.log("starting on port 8002")
+  console.log("The magic happes on port 8002!")
 }
 
 
