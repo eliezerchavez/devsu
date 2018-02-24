@@ -1,14 +1,14 @@
 version: '2'
 services:
   nginx:
-    image: echavez/devsu-nginx
+    image: eliezerchavez/devsu-nginx
     networks:
       static-network:
         ipv4_address: 172.20.128.2
     ports:
       - "8080:80"
   app01:
-    image: echavez/devsu-hello-app
+    image: eliezerchavez/devsu-hello-app
     networks:
       static-network:
         ipv4_address: 172.20.128.3
@@ -17,7 +17,7 @@ services:
     expose:
       - "8002"
   app02:
-    image: echavez/devsu-hello-app
+    image: eliezerchavez/devsu-hello-app
     networks:
       static-network:
         ipv4_address: 172.20.128.4
