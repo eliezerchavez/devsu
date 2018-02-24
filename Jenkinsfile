@@ -24,7 +24,7 @@ pipeline {
                 dir('C:\\Users\\echavez\\source\\devsu\\app') {
                     bat """
                       docker build -t eliezerchavez/devsu-hello-app .
-                      docker login -u eliezerchavez -p 3li3z3r.2K18
+                      docker login -u eliezerchavez -p <secret>
                       docker push eliezerchavez/devsu-hello-app:latest
                     """
                 }
