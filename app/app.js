@@ -31,10 +31,12 @@ app.use(bodyParser.json())
 
 app.get("/hello/:name", function(req, res) {
 
-  if (validator.isAlpha(req.params.name, 'es-ES'))
+  if (validator.isAlpha(req.params.name)) {
     res.send({"message":"Hello " + req.params.name + " from " + os.hostname()});
-  else 
+  } else {
+    res.status(400);
     res.send({"message":"Only valid names are accepted!"});
+  }
 
 })
 
