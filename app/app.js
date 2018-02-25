@@ -43,7 +43,7 @@ app.get("/hello/:name", function(req, res) {
 if(process.mainModule.filename.indexOf("node_modules/mocha/bin/_mocha")==-1)
 {
   app.listen(8002);
-  console.log("The magic happes on port 8002!")
+  console.log("Application is listening in port 8002.")
 }
 
 
