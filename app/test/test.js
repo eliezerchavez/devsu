@@ -55,7 +55,7 @@ describe("App", () => {
       chai.request(server)
           .get("/hello/Eliezer1")
           .end((err, res) => {
-              res.should.have.status(200);
+              res.should.have.status(400);
               res.body.should.be.an.instanceOf(Object).and.have.property("message");
               res.body.message.should.be.a("string");
               res.body.message.should.match(errMsg);
